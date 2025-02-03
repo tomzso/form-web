@@ -1,0 +1,267 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  display: block;
+}
+
+.render-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  padding: 40px;
+  padding-top: 0px;
+}
+
+.title-desc-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  padding: 40px;
+  padding-top: 100px;
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.question-container {
+  background-color: #f7f7f7;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  width: 600px;
+}
+
+.question-title-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.question-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.required-star {
+  color: red;
+  margin-left: 5px;
+}
+
+.input-wrapper,
+.checkbox-wrapper,
+.radio-wrapper {
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 90%;
+  padding-left: 50px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.checkbox-label,
+.radio-label {
+  display: block;
+  margin: 5px 0;
+  margin-left: 60px;
+}
+
+.checkbox-input,
+.radio-input {
+  margin-right: 10px;
+}
+
+/* Validation error */
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20%;
+}
+
+.pagination-buttons button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination-buttons button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  margin-left: 1100px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.required-text {
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.parent-required-text {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.question-number {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.success-message,
+.error-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  color: white;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+  z-index: 9999;
+}
+
+.success-message {
+  background-color: #28a745;
+}
+
+.error-message {
+  background-color: #dc3545;
+}
+
+.correct-answer-container {
+  text-align: left;
+  color: green;
+  margin-left: 100px;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.upload-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-height: 200px;
+  height: auto;
+  min-height: 45px;
+  background-color: #f7f7f7;
+  padding-left: 50px;
+}
+
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: auto;
+  max-width: 100px;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.score-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding-left: 400px;
+}
+.score-container h3 {
+  color: blue;
+}
+
+.error2-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  background-color: #ffffff;
+  color: #333;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 60px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .pagination-buttons {
+    margin-left: 37%;
+    width: 50%;
+  }
+  .render-form {
+    margin-left: 23%;
+  }
+
+  .title-desc-container {
+    margin-left: 20%;
+  }
+  .score-container {
+    width: 550px;
+  }
+}

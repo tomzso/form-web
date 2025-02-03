@@ -1,0 +1,15 @@
+.page-not-available {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  background-color: #f8f9fa;
+  color: #333;
+  width: 100%;
+  min-height: 100vh; 
+  padding-top: 60px; 
+  box-sizing: border-box;
+}

@@ -1,0 +1,251 @@
+/* Reset global styles */
+html, body {
+  margin: 0;
+  height: 100%;
+  display: block;
+}
+
+/* Main form styling */
+.render-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  padding: 40px;
+
+  padding-top: 0px;
+  margin-right: 0px;
+}
+
+.title-desc-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 40px;
+
+  padding-top: 100px;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Container for questions */
+.content-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+/* Individual question styling */
+.question-container {
+  background-color: #f7f7f7;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  width: 600px
+}
+
+/* Title styling */
+.question-title-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.question-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.required-star {
+  color: red;
+  margin-left: 5px;
+}
+
+/* Input fields */
+.input-wrapper, .checkbox-wrapper, .radio-wrapper {
+  margin-bottom: 10px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.checkbox-label, .radio-label {
+  display: block;
+  margin: 5px 0;
+  margin-left: 60px;
+}
+
+.checkbox-input, .radio-input {
+  margin-right: 10px;
+}
+
+/* Validation error */
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+}
+
+/* Success message */
+.success-message {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Submit button */
+.submit-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 30px;
+  gap: 550px;
+}
+
+.pagination-buttons button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination-buttons button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Container for the Submit button */
+.submit-button-container {
+  display: flex;            /* Use flexbox */
+  justify-content: center;  /* Center button horizontally */
+  align-items: center;      /* (Optional) Center vertically */
+  margin-top: 20px;
+  margin-bottom: 40px;
+  margin-left: 1100px;
+
+  
+}
+
+/* Submit button styling */
+.submit-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.required-text {
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.parent-required-text {
+  display: flex;
+  justify-content: flex-end;  /* Align the content to the end (right for row, bottom for column) */
+  align-items: center;        /* Optionally align vertically in the middle */
+}
+
+.question-number {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+
+.success-message,
+.error-message {
+  position: fixed;
+  top: 20px;  /* Distance from the top of the viewport */
+  right: 20px;  /* Distance from the right edge of the viewport */
+  padding: 15px;
+  color: white;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+  z-index: 9999; /* Ensure it's above other content */
+}
+
+.success-message {
+  background-color: #28a745; /* Green for success */
+}
+
+.error-message {
+  background-color: #dc3545; /* Red for error */
+}
+
+.correct-answer-container {
+  text-align: left;       /* Align text to the right */
+  color: green;            /* Make the text green */
+  margin-left: 100px;      /* Add some right margin for spacing */
+  font-style: italic;      /* Optional: Italicize the answer text */
+  margin-top: 20px;
+}
+
+.upload-container {
+  position: relative; /* This enables absolute positioning inside this container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Make it fill the parent container */
+  max-height: 200px;
+  height: auto; /* Allow the container to adjust its height */
+  min-height: 45px;
+  background-color: #f7f7f7; /* Optional background color */
+  padding-left: 50px; /* Add padding to the left */
+}
+
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;  /* Set the maximum height for the image */
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: auto;   /* Let width adjust automatically */
+  max-width: 100px; /* Ensures it doesn't exceed the container width */
+  max-height: 150px; /* Controls the maximum height of the image */
+  object-fit: contain; /* Ensures the image fits within the dimensions */
+}
+

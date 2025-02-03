@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA9zQwyLQWMEmr8K3PknoYTgAAAAACAAAAAAAQZgAAAAEAACAAAABm1yRlu4epQtrMZPnb3J7XJLZzSHH954QgudSURq27KgAAAAAOgAAAAAIAACAAAACuaOnYlXrE82mYiVzYbuBoytqYmTGC+qjzALVAbDG7QiAAAADlo68gJxVgRsnm77j/hT2j8U+xebOCVXMSnWHauKIZckAAAAC0lhwVCv5oHeeqfSziZzOslK3efTrDB0Au5l+84UJ2lL0i6zhmQOUDKkpZmdO1menx9GKxWOf1moIgSe00q0gc</EncryptedPassword>
+    <History>True|2025-01-12T21:44:50.7129635Z;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=SQL6030.site4now.net%3bInitial Catalog=db_ab1a1d_lengto01%3bUser Id=db_ab1a1d_lengto01_admin%3bPassword=ShadowMistery97%29</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="api.Data.ApplicationDBContext">
+      <Value>Data Source=SQL6030.site4now.net%3bInitial Catalog=db_ab1a1d_lengto01%3bUser Id=db_ab1a1d_lengto01_admin%3bPassword=ShadowMistery97%29</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
