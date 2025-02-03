@@ -10,7 +10,7 @@
 .text-section {
   flex: 1;
   margin-right: 20px;
-  text-align: left;
+  text-align: center;
 }
 
 .text-section h1 {
@@ -74,7 +74,7 @@
 }
 
 .slider-image {
-  width: 1300px;
+  width: 800px;
   height: auto;
   max-height: 500px;
   object-fit: cover;
