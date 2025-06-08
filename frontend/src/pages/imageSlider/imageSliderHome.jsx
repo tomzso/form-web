@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import image1 from "../../assets/image1.jpg";
 import image2 from "../../assets/image2.jpg";
 import image3 from "../../assets/image3.jpg";
-import "./imageSliderHome.css"; // Import CSS for layout and animations
+import "./imageSliderHome.css";
 import { useNavigate } from "react-router-dom";
 
 export const ImageSliderHome = () => {
@@ -29,7 +29,6 @@ export const ImageSliderHome = () => {
 
   return (
     <div className="slide-home-container">
-      {/* Left section with text and buttons */}
       <div className="text-section">
         <h1>Welcome to Our Application</h1>
         <p>Easily manage your tasks, create surveys, and analyze responses in real-time. Join us today to get started!</p>
@@ -39,7 +38,6 @@ export const ImageSliderHome = () => {
         </div>
       </div>
 
-      {/* Right section with image slider */}
       <div className={`slider-container ${fade ? "fade-in" : "fade-out"}`}>
         <img
           src={images[currentImageIndex]}

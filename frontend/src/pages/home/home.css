@@ -3,12 +3,13 @@
   display: flex;
   height: 100vh;
   width: 100%;
+  min-width: 1220px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 20px;
   background-color: #ffffff;
-  padding: 100px 20px 20px;
+  padding: 10px 20px 20px;
 }
 
 .search-input {
@@ -28,7 +29,7 @@
 }
 
 .form-card {
-  background: linear-gradient(135deg, #f3e7e9, #e3e9f3);
+  background: #ede8ef;
   border-radius: 15px;
   padding: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -36,7 +37,6 @@
   width: 100%;
   min-width: 280px; 
   max-width: 280px;
-
 }
 
 .form-title2 {
@@ -58,6 +58,24 @@
 .form-type, .form-url {
   color: #9a9a9a;
   font-size: 12px;
+}
+.copy-button {
+  display: inline-block;
+  margin-left: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem; 
+  color: #666666;
+  width: 20px;
+}
+.copy-button:hover {
+  background: transparent;
+  color: #007bff;
+}
+.copy-button:focus {
+  outline: #ede8ef;
 }
 
 .pagination-container {
@@ -209,44 +227,37 @@
 }
 
 .full-width-container {
-  padding-top: 20%;
+  padding-top: 0%;
   width: 100%;
 }
 
-/* Mobile-responsive adjustments */
 @media screen and (max-width: 768px) {
   .home-container {
     padding: 10px;
     flex-direction: column;
     align-items: center;
-    justify-content:  flex-start;
+    justify-content: flex-start;
+    min-width: unset;
   }
 
-  .search-input {
-    width: 90%;
+  .search-input,
+  .search-bar {
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .form-grid {
-    grid-template-columns: repeat(2, 1fr); 
+    grid-template-columns: 1fr; 
     width: 100%;
   }
 
   .form-card {
-    padding: 10px;
-    font-size: 14px; 
+    padding: 8px; 
+    font-size: 12px; 
   }
 
   .form-title2 {
-    font-size: 18px;
-  }
-
-  .pagination-container {
-    margin-top: 20px;
-  }
-
-  .pagination li a {
-    font-size: 12px;
-    padding: 8px 16px;
+    font-size: 16px; 
   }
 
   .form-actions {
@@ -254,49 +265,26 @@
     gap: 5px;
   }
 
+  .pagination-container {
+    margin-top: 20px;
+  }
+
+  .pagination li a {
+    font-size: 10px; 
+    padding: 8px 10px; 
+  }
+
   .search-url-bar {
     width: 100%;
-    flex-direction: column; /* Stack input and button vertically */
+    flex-direction: column;
     margin-top: var(--dynamic-margin-top);
-
   }
 
   .search-url-button {
     margin-left: 0;
     margin-top: 10px;
-  }
-
-  .search-input,.search-bar {
-    width: 90%;
-    margin-bottom: 10px;
+    padding: 8px; 
   }
 }
 
-@media screen and (max-width: 480px) {
-  .form-grid {
-    grid-template-columns: 1fr; 
-  }
-
-  .search-input, .search-bar {
-    width: 100%;
-  }
-
-  .pagination li a {
-    padding: 8px 10px;
-    font-size: 10px;
-  }
-
-  .form-card {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .form-title2 {
-    font-size: 16px;
-  }
-
-  .search-url-button {
-    padding: 8px;
-  }
-}
 
