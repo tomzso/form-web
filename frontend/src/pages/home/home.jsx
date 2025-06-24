@@ -1,12 +1,12 @@
 import "./home.css";
-
 import React, { useState, useContext, useEffect } from "react";
 import { FormContext } from "../../context/form-context";
-import { getFormByUser, deleteForm } from "../../api/formApi";
+import { getFormByUser, deleteForm } from "../../services/api/formApi";
 import { useNavigate } from "react-router-dom";
-import FormCard from "./formCard";
-import SearchBars from "./searchBars";
-import Pagination from "./pagination";
+
+import SearchBars from "../../components/pages/home/searchBar/searchBars";
+import Pagination from "../../components/pagination/pagination";
+import FormCard from "../../components/pages/home/formCard/formCard";
 
 export const Home = () => {
   const { token } = useContext(FormContext);
@@ -16,10 +16,13 @@ export const Home = () => {
   const [searchUrl, setSearchUrl] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [currentForms, setCurrentForms] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const formsPerPage = 8;
 
+
   const fetchForms = async () => {
+    setIsLoading(true);
     try {
       const response = await getFormByUser(token);
       if (response.success) {
@@ -28,6 +31,8 @@ export const Home = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,6 +90,7 @@ export const Home = () => {
     document.body.removeChild(input);
   };
 
+  if (isLoading) return null;
 
   return (
     <div className="home-container">

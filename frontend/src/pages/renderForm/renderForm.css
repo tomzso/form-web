@@ -1,8 +1,11 @@
-html,
 body {
   margin: 0;
   height: 100%;
   display: block;
+}
+
+.full-form-render-container {
+  width: 100%;
 }
 
 .render-form {
@@ -27,6 +30,7 @@ body {
   padding: 40px;
   padding-top: 100px;
 }
+
 .bottom-container {
   display: flex;
   padding: 100px;
@@ -39,87 +43,14 @@ h2 {
   margin-bottom: 20px;
 }
 
-.content-wrapper {
-  width: 100%;
-  max-width: 800px;
-  margin-top: 20px;
-}
-
-.question-container {
-  background-color: #f7f7f7;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
-  width: 600px;
-}
-.preview-image {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
-}
-
-.question-title-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.question-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.required-star {
-  color: red;
-  margin-left: 5px;
-}
-
-.input-wrapper,
-.checkbox-wrapper,
-.radio-wrapper {
-  margin-bottom: 10px;
-}
-
-.input-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  width: 90%;
-  padding-left: 50px;
-}
-
-.input-field {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.checkbox-label,
-.radio-label {
-  display: block;
-  margin: 5px 0;
-  margin-left: 60px;
-}
-
-.checkbox-input,
-.radio-input {
-  margin-right: 10px;
-}
-
-.error-text {
-  color: red;
-  font-size: 0.9rem;
-}
-
 .pagination-buttons {
   display: flex;
   justify-content: center;
-  margin-top: 0px;
+  align-items: center;
+  margin-top: 40px;
   gap: 40%;
+  background-color: #ffffff;
+  width: 100vw;
 }
 
 .pagination-buttons button {
@@ -142,7 +73,7 @@ h2 {
   align-items: center;
   margin-top: 20px;
   margin-bottom: 40px;
-  margin-left: 1100px;
+  margin-left: 70vw;
   background-color: rgb(255, 255, 255);
 }
 
@@ -158,22 +89,6 @@ h2 {
 
 .submit-button:hover {
   background-color: #0056b3;
-}
-
-.required-text {
-  font-style: italic;
-  font-size: 0.8rem;
-}
-
-.parent-required-text {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.question-number {
-  font-weight: bold;
-  margin-right: 10px;
 }
 
 .success-message,
@@ -197,15 +112,7 @@ h2 {
   background-color: #dc3545;
 }
 
-.correct-answer-container {
-  text-align: left;
-  color: green;
-  margin-left: 100px;
-  font-style: italic;
-  margin-top: 20px;
-}
-
-.upload-container {
+.view-image-container {
   position: relative;
   display: flex;
   justify-content: center;
@@ -215,33 +122,23 @@ h2 {
   height: auto;
   min-height: 45px;
   background-color: #f7f7f7;
-  padding-left: 50px;
+  padding-left: 10px;
 }
 
-.image-preview {
-  max-width: 100%;
+.image-preview-render {
+  max-width: 250px;
   height: auto;
-  max-height: 300px;
+  max-height: 200px;
   margin-top: 20px;
   overflow: hidden;
 }
 
-.image-preview img {
+.image-preview-render img {
   width: auto;
-  max-width: 300px;
-  max-height: 250px;
+  max-width: 250px;
+  max-height: 200px;
   object-fit: contain;
-}
-
-.score-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  padding-left: 400px;
-}
-.score-container h3 {
-  color: blue;
+  border-radius: 5px;
 }
 
 .error2-container {
@@ -267,30 +164,32 @@ h2 {
 
 @media (max-width: 768px) {
   .pagination-buttons {
-    width: 100%;
+    min-width: 60%;
+    width: 90vw;
     gap: 20%;
   }
+
   .render-form {
     padding-bottom: 10px;
   }
 
   .score-container {
-    width: 550px;
+    width: 100vw;
+    padding-left: 0px;
   }
+
   .submit-button-container {
     position: sticky;
-    margin-left: 0;
-    margin-top: 40px;
+    margin-left: 0vw;
+    margin-right: 0;
+    margin-top: 80px;
     margin-bottom: 40px;
-    background-color: rgb(255, 255, 255);
-    justify-content: flex-end;
-    padding-right: 15px;
+    justify-content: flex-start;
+    padding-right: 0px;
+    width: 90vw;
   }
+
   .submit-button {
     width: 200px;
-  }
-  .image-preview img {
-    max-width: 200px;
-    max-height: 150px;
   }
 }

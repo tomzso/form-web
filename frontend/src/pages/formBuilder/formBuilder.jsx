@@ -1,25 +1,24 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { createForm, getFormByUrl, updateForm } from "../../api/formApi";
-import { createFormField, deleteFormField } from "../../api/formFieldApi";
-import { createFormFieldOption } from "../../api/formFieldOptionApi";
-import "./formBuilder.css";
+import { createForm, getFormByUrl, updateForm } from "../../services/api/formApi";
+import { createFormField, deleteFormField } from "../../services/api/formFieldApi";
+import { createFormFieldOption } from "../../services/api/formFieldOptionApi";
+import { createOptionsRequest } from "../../services/api/gemini";
 import { FormContext } from "../../context/form-context";
-import DropdownSelector from "./dropdownSelector";
-import DescriptionEditor from "./descriptionEditor";
-import TitleEditor from "./titleEditor";
-import QuestionList from "./questionList";
-import QuestionEditor from './questionEditor';
+import { Dropdown } from "../../components/pages/formBuilder/dropdown/dropdown";
+import { DescriptionEditor} from "../../components/pages/formBuilder/titleDescriptionEditor/descriptionEditor";
+import { TitleEditor } from "../../components/pages/formBuilder/titleDescriptionEditor/titleEditor";
+import { QuestionList } from "./../../components/pages/formBuilder/question/questionList";
+import { QuestionEditor } from "./../../components/pages/formBuilder/question/questionEditor";
+import { useCloudinaryUpload } from "../../hooks/useCloudinaryUpload";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPenToSquare,
-  faTrash,
-  faCheck,
-  faImage,
   faCloudArrowUp
 } from "@fortawesome/free-solid-svg-icons";
-import { set } from "@cloudinary/url-gen/actions/variable";
+
+import { PageNotAvailable } from "../pageNotAvailable/pageNotAvailable";
+import "./formBuilder.css";
 
 export const FormBuilder = () => {
   const { token, logError, logSuccess, userId } = useContext(FormContext);
@@ -33,7 +32,7 @@ export const FormBuilder = () => {
   const [selectedRadio, setSelectedRadio] = useState(null);
   const [radioLabels, setRadioLabels] = useState([]);
   const [checkboxLabels, setCheckboxLabels] = useState([]);
-  const [activeInputType, setActiveInputType] = useState(null);
+  const [activeOptionType, setActiveOptionType] = useState(null);
   const [question, setQuestion] = useState("");
   const [textboxInput, setTextboxInput] = useState("");
   const [savedQuestions, setSavedQuestions] = useState([]);
@@ -44,7 +43,7 @@ export const FormBuilder = () => {
   const [required, setRequired] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedType, setSelectedType] = useState(formType[0]);
+  const [selectedFormType, setSelectedFormType] = useState(formType[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [existingQuestionIds, setExistingQuestionIds] = useState([]);
   const [savedNewQuestions, setSavedNewQuestions] = useState([]);
@@ -54,60 +53,17 @@ export const FormBuilder = () => {
   const [formId, setFormId] = useState(null);
   const [removableQuestionList, setRemovableQuestionList] = useState([]);
   const [disableSaveButton, setDisableSaveButton] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
-  const cloudinaryRef = useRef();
-  const widgetRef = useRef();
   const location = useLocation();
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const { imageUrl, widgetRef, clearImage } = useCloudinaryUpload();
 
-  useEffect(() => {
-    cloudinaryRef.current = window.cloudinary;
-    widgetRef.current = cloudinaryRef.current.createUploadWidget(
-      {
-        cloudName: import.meta.env.VITE_API_CLOUD_NAME,
-        uploadPreset: import.meta.env.VITE_API_UPLOAD_PRESET,
-        multiple: false,
-        mime_types: [
-          { extensions: ["jpg", "jpeg", "png", "gif", "webp"] }, // Only image file types
-        ],
-      },
-      (error, result) => {
-        if (error) {
-          console.error("Upload Widget Error:", error);
-        }
-        if (result.event === "success") {
-
-          const uploadedImageUrl = result.info.secure_url;
-          console.log("Uploaded Image Data:", result.info);
-          setImageUrl(uploadedImageUrl);
-        }
-      }
-    );
-  }, []);
-
-  useEffect(() => {
-    const originalViewport = document.querySelector("meta[name=viewport]");
-    const originalContent = originalViewport?.getAttribute("content");
-
-    originalViewport?.setAttribute("content", "width=device-width, initial-scale=0.5");
-
-    return () => {
-      // Reset to original on page unmount
-      if (originalViewport && originalContent) {
-        originalViewport.setAttribute("content", originalContent);
-      } else {
-        originalViewport?.setAttribute("content", "width=device-width, initial-scale=1");
-      }
-    };
-  }, []);
-
-
+  // Fetch form data when modifying an existing form
   useEffect(() => {
     getForm();
   }, [editPath]);
 
-  function mapApiToFormField(apiObject) {
+  const mapApiToFormField = (apiObject) => {
     const questionIds = [];
 
     const mappedForm = apiObject.formFields.map((field) => {
@@ -146,7 +102,7 @@ export const FormBuilder = () => {
 
   const getForm = async () => {
     console.log("editPath:", editPath);
-    console.log("location.pathname:", location.pathname);
+    console.log("location.pathname:", location.pathname); 
     if (editPath === undefined && location.pathname !== `${import.meta.env.VITE_API_BASE_URL}/formBuilder`) {
       return;
     }
@@ -154,7 +110,7 @@ export const FormBuilder = () => {
     setIsEditPage(false); // Reset the edit page flag
     setFormId(null); // Reset the form ID
     if (location.pathname === `${import.meta.env.VITE_API_BASE_URL}/formBuilder`) {
-      setSelectedType("Form");
+      setSelectedFormType("Form");
       setFormDescription("My description");
       setFormTitle("My title");
       setFormId(null);
@@ -168,7 +124,7 @@ export const FormBuilder = () => {
       const response = await getFormByUrl(token, editPath);
 
       if (userId !== response.data.userId) setPageAvailable(false);
-      setSelectedType(response.data.type);
+      setSelectedFormType(response.data.type);
       setFormDescription(response.data.description);
       setFormTitle(response.data.title);
       setFormId(response.data.id);
@@ -190,12 +146,12 @@ export const FormBuilder = () => {
     setCheckboxes([]);
     setRadioLabels([]);
     setCheckboxLabels([]);
-    setActiveInputType("textbox");
+    setActiveOptionType("textbox");
   };
 
   const handleAddInput = (type, isFromButton = false) => {
     if (type === "radiobox") {
-      setActiveInputType("radiobox");
+      setActiveOptionType("radiobox");
       setTextboxes([]);
       setCheckboxes([]);
       setCheckboxLabels([]);
@@ -209,7 +165,7 @@ export const FormBuilder = () => {
       }
       if (radioboxes.length === 0) initRadioOptions();
     } else if (type === "checkbox") {
-      setActiveInputType("checkbox");
+      setActiveOptionType("checkbox");
       setTextboxes([]);
       setRadioboxes([]);
       setRadioLabels([]);
@@ -277,19 +233,16 @@ export const FormBuilder = () => {
     setQuestion(event.target.value);
   };
 
-  useEffect(() => {
-    console.log(savedQuestions);
-  }, [savedQuestions]);
 
   const handleSaveQuestion = () => {
 
     const isInputFilled = () => {
-      if (activeInputType === "textbox") {
-        return question && (textboxInput || selectedType == "Form");
+      if (activeOptionType === "textbox") {
+        return question && (textboxInput || selectedFormType == "Form");
       }
 
-      if (activeInputType === "radiobox") {
-        if (selectedRadio === null && selectedType == "Quiz") {
+      if (activeOptionType === "radiobox") {
+        if (selectedRadio === null && selectedFormType == "Quiz") {
           logError(
             "Please select an option for the radio buttons.",
             setErrorMessage
@@ -298,10 +251,10 @@ export const FormBuilder = () => {
         }
         return radioLabels.every((label) => label) && question;
       }
-      if (activeInputType === "checkbox") {
+      if (activeOptionType === "checkbox") {
         if (
           !checkboxes.some((checkbox) => checkbox) &&
-          selectedType == "Quiz"
+          selectedFormType == "Quiz"
         ) {
           logError(
             "Please select at least one checkbox option.",
@@ -329,11 +282,11 @@ export const FormBuilder = () => {
         ...savedNewQuestions,
         {
           question,
-          type: activeInputType,
+          type: activeOptionType,
           options:
-            activeInputType === "textbox"
+            activeOptionType === "textbox"
               ? textboxInput
-              : activeInputType === "radiobox"
+              : activeOptionType === "radiobox"
                 ? radioLabels
                 : checkboxLabels,
           selectedRadio: selectedRadio,
@@ -348,16 +301,16 @@ export const FormBuilder = () => {
       ...savedQuestions,
       {
         question,
-        type: activeInputType,
+        type: activeOptionType,
         options:
-          activeInputType === "textbox"
+          activeOptionType === "textbox"
             ? textboxInput
-            : activeInputType === "radiobox"
+            : activeOptionType === "radiobox"
               ? radioLabels
               : checkboxLabels,
         selectedRadio: selectedRadio,
         selectedCheckboxes: checkboxes,
-        required, // Add required status to saved question
+        required, 
         imageUrl: localImageUrl === null ? "" : imageUrl,
       },
     ]);
@@ -370,12 +323,11 @@ export const FormBuilder = () => {
     setRadioLabels([]);
     setCheckboxLabels([]);
     setSelectedRadio(null);
-    setActiveInputType(null);
-    setRequired(false); // Reset the required checkbox
-    setImageUrl(null);
+    setActiveOptionType(null);
+    setRequired(false); 
+    clearImage(null);
     inputRef.current.focus();
   };
-
 
   const handleDeleteQuestion = async (index) => {
     // Get the ID of the question to be deleted from the existing question IDs array
@@ -408,11 +360,6 @@ export const FormBuilder = () => {
   const handleSaveForm = async () => {
     setDisableSaveButton(true);
     setTimeout(() => setDisableSaveButton(false), 3000);
-    // Ensure token exists
-    if (!token) {
-      logError("Please log in to save the form.", setErrorMessage);
-      return;
-    }
 
     // Check if form title is empty
     if (!formTitle.trim()) {
@@ -428,13 +375,13 @@ export const FormBuilder = () => {
     // Call the createForm function to save the form with the title and description
     const response =
       formId === null
-        ? await createForm(token, formTitle, formDescription, selectedType)
+        ? await createForm(token, formTitle, formDescription, selectedFormType)
         : await updateForm(
           token,
           formId,
           formTitle,
           formDescription,
-          selectedType
+          selectedFormType
         );
 
     const savedData = isEditPage ? savedNewQuestions : savedQuestions;
@@ -537,6 +484,73 @@ export const FormBuilder = () => {
 
   };
 
+const handleGetPrompt = async () => {
+  console.log("datas:", imageUrl, activeOptionType, question, token);
+
+  if (question.trim() === "") {
+    logError("Please start typing the question", setErrorMessage);
+    return;
+  }
+
+  if (activeOptionType === null || question.trim() === "") {
+    logError("Please select an option type", setErrorMessage);
+    return;
+  }
+
+  try {
+    const result = await createOptionsRequest(
+      token,
+      imageUrl ?? "",
+      activeOptionType,
+      question
+    );
+    console.log("Prompt result:", result);
+
+    if (isValidPromptResult(result)) {
+      const json = JSON.parse(result.data);
+      if (activeOptionType === "radiobox") {
+        const options = json.map((item) => item.option);
+        const isTrue = json.map((item) => item.isTrue);
+        setRadioboxes(options);
+        setRadioLabels(options);
+        const correctIndex = isTrue.findIndex(val => val === true);
+        setSelectedRadio(correctIndex !== -1 ? correctIndex : null);
+      } else if (activeOptionType === "checkbox") {
+        const options = json.map((item) => item.option);
+        const isTrue = json.map((item) => item.isTrue);
+        setCheckboxLabels(options);
+        setCheckboxes(isTrue);
+      } else if (activeOptionType === "textbox") {
+        setTextboxInput(json[0].option);
+        console.log("Textbox input set to:", result);
+      }
+      if(activeOptionType === "radiobox" || activeOptionType === "checkbox" || activeOptionType === "textbox") {
+        logSuccess("Options set successfully.", setSuccessMessage);
+      }
+    } else {
+      console.error("Prompt result is not valid:", result);
+      logError("Prompt result is not valid.", setErrorMessage);
+    }
+  } catch (err) {
+    console.error("Failed to fetch options from Gemini:", err);
+    logError("Failed to generate options from prompt.", setErrorMessage);
+  }
+};
+
+  const isValidPromptResult = (result) => {
+    // Format 1: single object with 'option' key
+    if (result && typeof result === 'object' && !Array.isArray(result)) {
+      return true;
+    }
+
+    // Format 2: array of 4 objects with 'option' and 'isTrue'
+    if (Array.isArray(result) && result.length === 4) {
+      return true;
+    }
+
+    return false;
+  }
+
   const handleFormTitleChange = (event) => {
     setFormTitle(event.target.value);
   };
@@ -599,22 +613,20 @@ export const FormBuilder = () => {
 
   if (pageAvailable === false) {
     return (
-      <div className="error-container">
-        <h2>Page is not available</h2>
-      </div>
+      <PageNotAvailable/>
     );
   }
 
   return (
     <div>
-      <div>
-        <DropdownSelector
-          selectedType={selectedType}
+      <div className="full-form-builder-container">
+        <Dropdown
+          selectedFormType={selectedFormType}
           isDropdownOpen={isDropdownOpen}
           formType={formType}
           toggleDropdown={() => setIsDropdownOpen(!isDropdownOpen)}
           handleTypeSelect={(type) => {
-            setSelectedType(type);
+            setSelectedFormType(type);
             setIsDropdownOpen(false);
           }}
         />
@@ -643,7 +655,7 @@ export const FormBuilder = () => {
           <div className="content-wrapper">
             <QuestionList
               questions={savedQuestions}
-              formType={selectedType}
+              formType={selectedFormType}
               onDelete={handleDeleteQuestion}
             />
 
@@ -657,7 +669,7 @@ export const FormBuilder = () => {
               setRequired={setRequired}
               handleAddTextbox={handleAddTextbox}
               handleAddInput={handleAddInput}
-              activeInputType={activeInputType}
+              activeOptionType={activeOptionType}
               textboxInput={textboxInput}
               handleTextboxInputChange={handleTextboxInputChange}
               radioboxes={radioboxes}
@@ -674,6 +686,7 @@ export const FormBuilder = () => {
               handleSaveQuestion={handleSaveQuestion}
               successMessage={successMessage}
               errorMessage={errorMessage}
+              handleGetPrompt={handleGetPrompt}
             />
           </div>
 
@@ -689,6 +702,7 @@ export const FormBuilder = () => {
             </button>
           </div>
         </div>
+
 
       </div>
     </div>

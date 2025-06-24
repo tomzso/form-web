@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import { Navbar } from "./components/navbar";
+import { Navbar } from "./components/navbar/navbar";
 import { Home } from "./pages/home/home";
 import { LoginSignup } from "./pages/loginSignup/loginSignup";
 import { FormBuilder } from "./pages/formBuilder/formBuilder";
@@ -89,6 +89,7 @@ function App() {
             />
 
             <Route path={`${homeUrl}/*`} element={<RenderForm />} />
+            <Route path="*" element={<PageNotAvailable />} />
           </Routes>
         </Router>
       </FormContextProvider>

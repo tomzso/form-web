@@ -3,7 +3,7 @@ import { Pie, Bar } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import React, { useState, useContext, useEffect } from "react";
-import { getFormByUrl } from "../../api/formApi";
+import { getFormByUrl } from "../../services/api/formApi";
 import "./stats.css";
 import {
   Chart as ChartJS,

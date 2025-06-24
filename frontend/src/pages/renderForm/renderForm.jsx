@@ -1,22 +1,16 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getFormByUrl } from "../../api/formApi";
-import { getFormResponseByFormId } from "../../api/formResponseApi";
-import { createFormResponse } from "../../api/formResponseApi";
-import { createFieldResponse } from "../../api/fieldResponseApi";
-import { createFormFieldOptionByUserAnswer } from "../../api/formFieldOptionApi";
+import { getFormByUrl } from "../../services/api/formApi";
+import { getFormResponseByFormId } from "../../services/api/formResponseApi";
+import { createFormResponse } from "../../services/api/formResponseApi";
+import { createFieldResponse } from "../../services/api/fieldResponseApi";
+import { createFormFieldOptionByUserAnswer } from "../../services/api/formFieldOptionApi";
 import { FormContext } from "../../context/form-context";
-
-import Question from "./question";
-import Pagination from "./pagination";
-import ScoreDisplay from "./scoreDisplay";
-import {
-  calculateUserScore,
-} from "./answerRenderer";
-
+import { Question } from "../../components/pages/renderForm/question/question";
+import { ScoreDisplay } from "../../components/pages/renderForm/scoreDisplay/scoreDisplay";
+import { PageNotAvailable } from "../pageNotAvailable/pageNotAvailable";
+import Pagination from "../../components/pagination/pagination";
 import "./renderForm.css";
-
-const questionsPerPage = 5;
 
 export const RenderForm = () => {
   const { token, logError, logSuccess } = useContext(FormContext);
@@ -35,6 +29,15 @@ export const RenderForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [disableSave, setDisableSave] = useState(false);
+  const questionsPerPage = 5;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+  
+  useEffect(() => {
+    getForm();
+  }, [editPath]);
 
   // Fetch form & user response
   const getForm = async () => {
@@ -59,26 +62,6 @@ export const RenderForm = () => {
     }
   };
 
-  useEffect(() => {
-    const originalViewport = document.querySelector("meta[name=viewport]");
-    const originalContent = originalViewport?.getAttribute("content");
-
-    originalViewport?.setAttribute("content", "width=device-width, initial-scale=0.5");
-
-    return () => {
-      // Reset to original on page unmount
-      if (originalViewport && originalContent) {
-        originalViewport.setAttribute("content", originalContent);
-      } else {
-        originalViewport?.setAttribute("content", "width=device-width, initial-scale=1");
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    getForm();
-  }, [editPath]);
-
   const paginateQuestions = (questions, page, perPage) => {
     const startIndex = (page - 1) * perPage;
     return questions.slice(startIndex, startIndex + perPage);
@@ -87,8 +70,6 @@ export const RenderForm = () => {
   const displayedQuestions = form?.formFields
     ? paginateQuestions(form.formFields, currentPage, questionsPerPage)
     : [];
-
-  const calculateQuestionNumber = (index) => (currentPage - 1) * questionsPerPage + index + 1;
 
   const handleAnswerChange = (questionId, value, isCheckbox = false) => {
     if (isCheckbox) {
@@ -162,7 +143,9 @@ export const RenderForm = () => {
     }
 
     try {
+      console.log("form id form responses:", form.id);
       const formResponse = await createFormResponse(token, form.id);
+      console.log("Form response created:", formResponse);
       const responseId = formResponse.data.id;
 
       for (const answer of answers) {
@@ -194,35 +177,6 @@ export const RenderForm = () => {
     }
   };
 
-  const handleNext = () => {
-    if (currentPage < Math.ceil(form?.formFields.length / questionsPerPage)) {
-      setCurrentPage((prev) => prev + 1);
-      window.scrollTo(0, 0);
-    }
-  };
-
-  const handleBack = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-      window.scrollTo(0, 0);
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errors = form?.formFields
-      .filter((q) => q.required && !answers.find((a) => a.questionId === q.id))
-      .map((q) => q.id);
-
-    if (errors.length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setFormErrors([]);
-    setSubmitted(true);
-    console.log("Form submitted:", answers);
-  };
 
   const renderUserAnswers = (field) => {
     const userAnswers = userResponse?.fieldResponses?.filter(
@@ -244,69 +198,121 @@ export const RenderForm = () => {
       // Return their optionValue joined as a string
       return correctOptions.map((option) => option.optionValue).join(", ");
     }
-
     return null; // Return null if no options or none are correct
   };
 
+  const calculateUserScore = () => {
+    let score = 0;
 
+    if (!form || !userResponse) return score;
+
+    for (const field of form.formFields) {
+      const userAnswer = renderUserAnswers(field); // Get the user's answer for the current field
+
+      if (field.fieldType === "textbox" || field.fieldType === "radiobox") {
+        // Textbox or radiobox: 1 point for correct answer
+        const correctOption = field.options?.find((option) => option.isCorrect);
+        if (
+          correctOption &&
+          userAnswer?.trim().toLowerCase() ===
+          correctOption.optionValue.trim().toLowerCase()
+        ) {
+          score += 1;
+        }
+      } else if (field.fieldType === "checkbox") {
+        // Checkbox: (1 / number of correct options) for each correct selection
+        const correctOptions =
+          field.options?.filter((option) => option.isCorrect) || [];
+        const userSelectedCorrectOptions = correctOptions.filter((option) =>
+          userAnswer.includes(option.optionValue)
+        );
+
+        if (correctOptions.length > 0) {
+          // Add score for correct selections
+          score += userSelectedCorrectOptions.length / correctOptions.length;
+        }
+
+        // Handle incorrect selections
+        const incorrectOptions =
+          field.options?.filter((option) => !option.isCorrect) || [];
+        const userSelectedIncorrectOptions = incorrectOptions.filter((option) =>
+          userAnswer.includes(option.optionValue)
+        );
+
+        if (incorrectOptions.length > 0) {
+          // The penalty is based on the total number of choices (including both correct and incorrect options)
+          const totalChoices = field.options.length;
+
+          // Reduce score for incorrect selections
+          const penalty = -userSelectedIncorrectOptions.length / totalChoices;
+          score += penalty;
+        }
+      }
+    }
+
+    // Ensure score doesn't go below 0
+    return Math.max(score, 0);
+  };
+  
   if (loading) return <div>Loading...</div>;
-  if (error) return <div className="error2-container"><h2>Page is not available</h2></div>;
 
   return (
-    <div>
-      <div className="title-desc-container">
-        <h1>{form?.title || "Form Title"}</h1>
-        <h2>{form?.description || "Form Description"}</h2>
+    hasUserResponse === false ?
+    (
+      <div>
+        <PageNotAvailable />
       </div>
-
-      {userResponse && form.type === "Quiz" && (
-        <ScoreDisplay score={calculateUserScore(form, userResponse)} maxScore={form?.formFields.length || 0} />
-      )}
-
-      {displayedQuestions.map((field, index) => (
-        <div key={field.id} className="center-question">
-          <Question
-            field={field}
-            index={index}
-            currentPage={currentPage}
-            questionsPerPage={questionsPerPage}
-            answers={answers}
-            form={form}
-            userResponse={userResponse}
-            formErrors={formErrors}
-            handleAnswerChange={handleAnswerChange}
-            renderUserAnswers={renderUserAnswers}
-            renderCorrectAnswer={renderCorrectAnswer}
-          />
+    ) : (
+      <div className="full-form-render-container">
+        <div className="title-desc-container">
+          <h1>{form?.title || "Form Title"}</h1>
+          <h2>{form?.description || "Form Description"}</h2>
         </div>
-      ))}
 
-      <Pagination
-        currentPage={currentPage}
-        maxPage={Math.ceil(form?.formFields.length / questionsPerPage)}
-        onNext={handleNext}
-        onBack={handleBack}
-      />
+        {userResponse && form.type === "Quiz" && (
+          <ScoreDisplay score={calculateUserScore()} maxScore={form?.formFields.length || 0} />
+        )}
+        {displayedQuestions.map((field, index) => (
+          <div key={field.id} className="center-question">
+            <Question
+              field={field}
+              index={index}
+              currentPage={currentPage}
+              questionsPerPage={questionsPerPage}
+              answers={answers}
+              form={form}
+              userResponse={userResponse}
+              formErrors={formErrors}
+              handleAnswerChange={handleAnswerChange}
+              renderUserAnswers={renderUserAnswers}
+              renderCorrectAnswer={renderCorrectAnswer}
+            />
+          </div>
+        ))}
+        <Pagination
+            pageCount={Math.ceil(form?.formFields.length / questionsPerPage)}
+            onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+        />
 
-      {!userResponse && (
-        <div className="submit-button-container">
-          <button
-            className="submit-button"
-            onClick={handleSaveResponse}
-            disabled={disableSave}
-          >
-            Submit
-          </button>
-        </div>
-      )}
+        {!userResponse && (
+          <div className="submit-button-container">
+            <button
+              className="submit-button"
+              onClick={handleSaveResponse}
+              disabled={disableSave}
+            >
+              Submit
+            </button>
+          </div>
+        )}
 
-      <div className="bottom-container">
+        <div className="bottom-container">  </div>
+
+        {successMessage && <div className="success-message">{successMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       </div>
-
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-    </div>
+    )
   );
 };
 

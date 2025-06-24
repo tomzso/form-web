@@ -1,0 +1,121 @@
+.form-card {
+  background: #ede8ef;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  min-width: 170px; 
+  max-width: 500px;
+  border: 0.5px solid transparent;
+}
+
+.form-card:hover {
+  background-color: #eef5d2;
+  border: 0.5px solid #8bc34a;
+}
+
+.form-title2 {
+  color: #5a5a5a;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.form-description {
+  color: #7a7a7a;
+  font-size: 14px;
+}
+
+.form-date {
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.form-type,
+.form-url {
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.copy-button {
+  display: inline-block;
+  margin-left: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem; 
+  color: #666666;
+  width: 20px;
+}
+
+.copy-button:hover {
+  background: transparent;
+  color: #007bff;
+}
+
+.copy-button:focus {
+  outline: #ede8ef;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.action-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-style: bold;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.edit-button:hover {
+  background-color: #006400;
+  color: #ffffff;
+}
+
+.stats-button {
+  background-color: #007BFF;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.stats-button:hover {
+  background-color: #0056b3;
+  color: #ffffff;
+}
+
+.deleting-button {
+  background-color: red;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .form-card {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .form-title2 {
+    font-size: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

@@ -38,7 +38,6 @@ export const FormContextProvider = (props) => {
         setUserIdContext,
         logError,
         logSuccess,
-
     };
 
     return (

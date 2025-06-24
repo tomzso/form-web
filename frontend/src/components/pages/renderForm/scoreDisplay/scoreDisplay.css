@@ -1,0 +1,11 @@
+.score-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding-left: 400px;
+  color: blue;
+}
+.score-container h3 {
+  color: blue;
+}

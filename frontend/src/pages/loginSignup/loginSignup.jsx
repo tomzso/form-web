@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./loginSignup.css";
-import user_icon from "../../assets/person.png";
-import email_icon from "../../assets/email.png";
-import password_icon from "../../assets/password.png";
 import { FormContext } from "../../context/form-context";
 import { useNavigate, useLocation } from "react-router-dom";
-import { handleSubmitLoginSignup } from "./handleSubmitLoginSignup";
+import { handleSubmitLoginSignup } from "../../utils/handleSubmitLoginSignup";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faLock,
+  faEnvelope,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const LoginSignup = ({ setToken, setUserName, setUserId }) => {
   const {
@@ -68,7 +72,7 @@ export const LoginSignup = ({ setToken, setUserName, setUserId }) => {
   };
 
   return (
-    <div className="center-container">
+    <div>
       <div className="container">
         <div className="header">
           <div className="text">{action}</div>
@@ -76,19 +80,20 @@ export const LoginSignup = ({ setToken, setUserName, setUserId }) => {
         </div>
         <div className="inputs">
           <div className="input">
-            <img src={user_icon} alt="" />
-            <input type="text" placeholder="Name" onChange={handleNameChange} />
+            <FontAwesomeIcon icon={faUser} className="fixed-width-icon" />
+            <input placeholder="Name" onChange={handleNameChange} />
           </div>
+
           {action === "Sign Up" && (
-            <div className="inputs">
+  
               <div className="input">
-                <img src={email_icon} alt="" />
-                <input type="email" placeholder="Email Id" onChange={handleEmailChange} />
-              </div>
+                <FontAwesomeIcon icon={faEnvelope} className="fixed-width-icon" />
+                <input type="email" placeholder="Email" onChange={handleEmailChange} />
+
             </div>
           )}
           <div className="input">
-            <img src={password_icon} alt="" />
+            <FontAwesomeIcon icon={faLock} className="fixed-width-icon" />
             <input
               type="password"
               placeholder="Password"
@@ -96,6 +101,7 @@ export const LoginSignup = ({ setToken, setUserName, setUserId }) => {
               onKeyDown={handleKeyDown}
             />
           </div>
+
         </div>
         <div className="submit-container">
           <div

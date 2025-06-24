@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import image1 from "../../assets/image1.jpg";
-import image2 from "../../assets/image2.jpg";
-import image3 from "../../assets/image3.jpg";
+import image1 from "../../assets/image111.jpg";
+import image2 from "../../assets/image22.jpg";
+import image3 from "../../assets/image33.jpg";
 import "./imageSliderHome.css";
 import { useNavigate } from "react-router-dom";
 
