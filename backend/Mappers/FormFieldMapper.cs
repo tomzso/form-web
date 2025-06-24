@@ -8,20 +8,7 @@ namespace api.Mappers
 {
     public static class FormFieldMapper
     {
-        //public static FormFieldDto ToFormFieldDto(this FormField formField)
-        //{
 
-        //    return new FormFieldDto
-        //    {
-        //        Id = formField.Id,
-        //        FormId = formField.FormId,
-        //        Label = formField.Label,
-        //        FieldType = formField.FieldType,
-        //        Required = formField.Required,
-        //        Order = formField.Order,
-        //        Options = formField.FormFieldOptions?.Select(option => option.ToFormFieldOptionDto()).ToList()
-        //    };
-        //}
 
         public static FormFieldDto ToFormFieldDto(this FormField formField)
         {
@@ -48,28 +35,6 @@ namespace api.Mappers
             };
         }
 
-        //public static FormFieldWithResponseCountDto ToFormFieldWithResponsesDto(this FormField formField)
-        //{
-        //    var responses = formField.FieldResponses
-        //        .GroupBy(f => f.Value.Trim(), StringComparer.OrdinalIgnoreCase)
-        //        .Select(g => new FieldResponseWithResponseCountDto
-        //        {
-        //            FieldId = formField.Id,
-        //            Value = g.Key,
-        //            ResponseCount = g.Count()
-        //        }).ToList();
-        //    return new FormFieldWithResponseCountDto
-        //    {
-        //        Id = formField.Id,
-        //        FormId = formField.FormId,
-        //        Label = formField.Label,
-        //        FieldType = formField.FieldType,
-        //        Required = formField.Required,
-        //        Order = formField.Order,
-        //        Options = formField.FormFieldOptions?.Select(option => option.ToFormFieldOptionDto()).ToList(),
-        //        Responses = responses   
-        //    };
-        //}
 
 
         public static FormField ToFormFieldFromCreate(this CreateFormFieldDto formFieldDto, int formId)

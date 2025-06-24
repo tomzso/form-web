@@ -20,16 +20,7 @@ namespace api.Mappers
 
                 UserId = form.UserId,
                 FormFields = form.FormFields?.Select(field => field.ToFormFieldDto()).ToList()
-                //FormFields = form.FormFields?.Select(ff => new FormFieldDto
-                //{
-                //    Id = ff.Id,
-                //    FormId = ff.FormId,
-                //    Label = ff.Label,
-                //    FieldType = ff.FieldType,
-                //    Required = ff.Required,
-                //    Order = ff.Order,
-                //    Options = ff.FormFieldOptions?.Select(fo => fo.ToFormFieldOptionDto()).ToList()
-                //}).ToList()
+
             };
         }
 

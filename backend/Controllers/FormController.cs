@@ -54,25 +54,6 @@ namespace api.Controllers
         {
             var form = await _formRepository.GetByUrlAsync(url);
             if (form == null) return NotFound();
-            //var formDto = new FormDto
-            //{
-            //    Id = form.Id,
-            //    Title = form.Title,
-            //    Description = form.Description,
-            //    Status = form.Status,
-            //    CreatedAt = form.CreatedAt,
-            //    Url = form.Url,
-
-            //    UserId = form.UserId,
-                
-            //    FormFields = form.FormFields.Select(ff => new FormFieldDto
-            //    {
-            //        Id = ff.Id,
-            //        FieldName = ff.FieldName,
-            //        FieldType = ff.FieldType,
-            //        FormFieldOptions = ff.FormFieldOptions.Select(fo => fo.ToFormFieldOptionDto()).ToList()
-            //    }).ToList()
-            //};
             return Ok(form.ToFormDto());
         }
 

@@ -1,0 +1,1 @@
+Please return the answer in the following data structure only, where it contains the right answer. The answer data structure must be in this format: [{"option": "answer"}] Do not answer if the question is not a survery like question. Can you create exactly one short right answer for a form survey based on the following question provided by the form creator:
